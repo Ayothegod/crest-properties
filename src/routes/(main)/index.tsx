@@ -19,7 +19,7 @@ export default function Index() {
   return (
     <div class="grid place-items-center min-h-screen">
       <div class="">
-        Hello, world!
+        Hello, world! 
         {/* <svg
           xmlns="http://www.w3.org/2000/svg"
           version="1.1"

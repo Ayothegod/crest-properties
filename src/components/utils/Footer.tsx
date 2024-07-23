@@ -8,22 +8,22 @@ import { Button } from "@kobalte/core/button";
 export default function Footer() {
   return (
     <div class="bg-footer-bg w-full mt-8">
-      <div class="max-w-5xl mx-auto px-2 py-8">
+      <div class="max-w-6xl mx-auto px-2 py-8">
         <div class="flex flex-col-reverse md:flex-row md:justify-between gap-y-8">
           <div class="text-white flex flex-col gap-y-4">
             <Logo />
 
             <div class="font-light md:text-sm space-y-2">
               <div class="flex items-center gap-2">
-              <MapPinned />
+              <MapPinned class="h-5 w-5" />
                 <span class=" leading-7">24, Azuabie street, Rivers state</span>
               </div>
               <div class="flex items-center gap-2">
-                <Phone/>
+                <Phone class="h-5 w-5"/>
                 <span class=" leading-7">07000020000</span>
               </div>
               <div class="flex items-center gap-2">
-                <Mail/>
+                <Mail class="h-5 w-5"/>
                 <span class=" leading-7">coldmetalInfo@gmail.com</span>
               </div>
             </div>
