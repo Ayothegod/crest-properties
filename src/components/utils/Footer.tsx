@@ -8,7 +8,7 @@ import { Button } from "@kobalte/core/button";
 export default function Footer() {
   return (
     <div class="bg-footer-bg w-full mt-8">
-      <div class="max-w-6xl mx-auto px-2 py-8">
+      <div class="bodySize px-2 py-8">
         <div class="flex flex-col-reverse md:flex-row md:justify-between gap-y-8">
           <div class="text-white flex flex-col gap-y-4">
             <Logo />

@@ -77,3 +77,8 @@
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
 }
+
+.bodySize {
+  max-width: 1152px;
+  margin: 0 auto;
+}
