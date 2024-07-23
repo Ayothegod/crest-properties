@@ -2,7 +2,7 @@
   "name": "example-with-mdx",
   "type": "module",
   "scripts": {
-    "dev": "console-ninja vinxi dev --host",
+    "dev": "vinxi dev --host",
     "build": "vinxi build",
     "start": "vinxi start"
   },
