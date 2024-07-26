@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -66,4 +68,17 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.mask1 {
+  -webkit-mask-image: url(./assets/masking.png);
+  mask-image: url(./assets/masking.png);
+  /* height: 300px; */
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+.bodySize {
+  max-width: 1240px;
+  margin: 0 auto;
 }
