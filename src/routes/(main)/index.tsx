@@ -1,7 +1,6 @@
 import { Button } from "@kobalte/core/button";
 import { createSignal, createEffect } from "solid-js";
 import { SvgMask } from "~/components/build/SvgMask";
-import Counter from "~/components/Counter";
 import orgImage from "~/assets/masked-id.jpg";
 import mask from "~/assets/masking.png";
 
@@ -18,6 +17,7 @@ export default function Index() {
 
   return (
     <div class="grid place-items-center min-h-screen">
+      <img src={mask} alt="" />
       <div class="">
         Hello, world! 
         {/* <svg
@@ -115,7 +115,6 @@ export default function Index() {
           height="400"
           class="border-4 border-red-600 h-48 object-cover"
         />
-        <Counter />
         <Button
           class="bg-red-500 px-4 py-2 rounded-md"
           disabled

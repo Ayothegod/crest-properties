@@ -2,6 +2,9 @@
 
 export default function ListingsPage() {
   return (
-    <div>ListingsPage</div>
+    <div>
+      <p>ListingsPage</p>
+      <p>Hello, whats up bro</p>
+    </div>
   )
 }
