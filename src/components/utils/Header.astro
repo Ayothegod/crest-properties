@@ -1,0 +1,55 @@
+---
+import { AlignRight, ArrowUpRight, ChevronDown } from "lucide-astro";
+import { Button } from "../ui/button";
+import Logo from "./Logo";
+import { navLists } from "@/lib/data";
+---
+
+<main>
+  <div class={`bg-footer-bg text-white`}>
+    <div class="bodySize flex items-center justify-between py-4">
+      <Logo />
+
+      <div class="hidden md:flex">
+        <ul class="flex items-center gap-8 text-sm">
+          {
+            navLists.map((item) => (
+              <div>
+                {item.isButton && item.withIcon && (
+                  <a href={item.url}>
+                    <Button className="bg-black text-white px-4 py-2 rounded-full flex gap-2 items-center">
+                      {item.title}
+                      <ArrowUpRight />
+                    </Button>
+                  </a>
+                )}
+                {/* ${
+                      location.pathname == item.url && "border-b border-b-black"
+                    }
+                    */}
+
+                {!item.isButton && item.withIcon && (
+                  <a href={item.url} class={``}>
+                    <li class="flex items-center">
+                      {item.title} <ChevronDown />
+                    </li>
+                  </a>
+                )}
+
+                {!item.isButton && !item.iconName && (
+                  <a href={item.url} class={``}>
+                    <li>{item.title}</li>
+                  </a>
+                )}
+              </div>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="md:hidden">
+        <AlignRight />
+      </div>
+    </div>
+  </div>
+</main>

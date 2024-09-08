@@ -1,5 +1,7 @@
 # Astro Starter Kit: Basics
+
 db tailwind mdx react
+
 ```sh
 npm create astro@latest -- --template basics
 ```
