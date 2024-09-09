@@ -9,6 +9,9 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      height: {
+        'screen-minus-48': 'calc(100vh - 48px)',
+      },
       colors: {
         "listing-header-color": "#F1F1F1",
         "listing-body": "#EDEDEC",

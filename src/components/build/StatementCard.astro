@@ -1,0 +1,24 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  icon: any
+}
+const { title, description, icon: Icon } = Astro.props;
+---
+
+  <div class="px-4 py-6 bg-white text-black flex flex-col gap-4 rounded-md">
+    <aside class="relative flex items-center justify-center text-footer-bg">
+      <div class="flex-1 border-t border-footer-bg max-w-24"></div>
+      <span class="mx-4 font-bold text-lg">{title}</span>
+      <div class="flex-1 border-t border-footer-bg max-w-24"></div>
+    </aside>
+
+    <div class="flex justify-center bg-footer-bg max-w-max mx-auto text-white p-16 rounded-full">
+     <Icon class="h-10 w-10"/>
+    </div>
+
+    <div class="text-s text-neutral-800 md:text-base mt-auto">
+      {description}
+    </div>
+  </div>
