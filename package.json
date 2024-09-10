@@ -9,7 +9,9 @@
     "preview": "astro preview",
     "astro": "astro",
     "format:astro": "prettier --write \"**/*.astro\"",
-    "format": "prettier . --write "
+    "format": "prettier . --write ",
+    "migrate": "prisma migrate dev",
+    "studio":"prisma studio"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.3",
