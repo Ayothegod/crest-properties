@@ -1,0 +1,67 @@
+'use client'
+
+import { useState } from 'react'
+import { Button } from "@/components/ui/button"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Label } from "@/components/ui/label"
+import { Info } from 'lucide-react'
+
+interface OnboardingProps {
+  email: string
+  onComplete: (role: string) => void
+}
+
+interface RoleInfo {
+  title: string
+  description: string
+}
+
+const roleInfos: Record<string, RoleInfo> = {
+  agent: {
+    title: "Real Estate Agent",
+    description: "List properties, manage clients, and close deals."
+  },
+  investor: {
+    title: "Property Investor",
+    description: "Find investment opportunities and manage your portfolio."
+  },
+  buyer: {
+    title: "Home Buyer",
+    description: "Search for your dream home and get expert assistance."
+  }
+}
+
+export default function Onboarding({ email, onComplete }: OnboardingProps) {
+  const [role, setRole] = useState<string | undefined>()
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (role) {
+      onComplete(role)
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <h2 className="text-2xl font-bold text-center">Welcome to Real Estate Pro</h2>
+      <p className="text-center text-muted-foreground">Please select your role:</p>
+      <RadioGroup value={role} onValueChange={setRole} className="space-y-4">
+        {Object.entries(roleInfos).map(([key, info]) => (
+          <div key={key} className="flex items-start space-x-3 p-4 border rounded-lg hover:bg-gray-50 transition-colors">
+            <RadioGroupItem value={key} id={key} className="mt-1" />
+            <div className="flex-grow">
+              <Label htmlFor={key} className="text-base font-medium">
+                {info.title}
+              </Label>
+              <p className="text-sm text-muted-foreground mt-1">{info.description}</p>
+            </div>
+            <Info className="text-muted-foreground" size={20} />
+          </div>
+        ))}
+      </RadioGroup>
+      <Button type="submit" className="w-full" disabled={!role}>
+        Complete Onboarding
+      </Button>
+    </form>
+  )
+}
