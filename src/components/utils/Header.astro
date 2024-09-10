@@ -4,12 +4,12 @@ import { Button } from "../ui/button";
 import Logo from "./Logo";
 import { navLists } from "@/lib/data";
 
-console.log("hello")
+// console.log("hello")
 ---
 
 <main>
   <div class={`bg-footer-bg text-white`}>
-    <div class="bodySize flex items-center justify-between h-12">
+    <div class="bodySize flex items-center justify-between h-14 px-4">
       <Logo />
 
       <div class="hidden md:flex">
@@ -19,7 +19,7 @@ console.log("hello")
               <div>
                 {item.isButton && item.withIcon && (
                   <a href={item.url}>
-                    <Button className="bg-black text-white px-4 py-2 rounded-full flex gap-2 items-center">
+                    <Button className="rounded-full flex gap-2 items-center">
                       {item.title}
                       <ArrowUpRight />
                     </Button>

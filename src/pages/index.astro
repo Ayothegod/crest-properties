@@ -4,13 +4,14 @@ import "@/styles/globals.css";
 // import houseImage from "@/assets/house-image.jpeg";
 // import NoBghouseImage from "@/assets/no-bg-removebg-preview.png";
 import Layout from "../layouts/Layout.astro";
-import { Search, PanelTop, Store,SquareLibrary } from "lucide-astro";
+import { Search, PanelTop, Store, SquareLibrary, ArrowUpRight } from "lucide-astro";
 import StatementCard from "@/components/build/StatementCard.astro";
+import { Button } from "@/components/ui/button";
 ---
 
 <Layout title="Crest properties - Home">
   <div class="relative bg-footer-bg text-white">
-    <section class="relative bodySize h-screen-minus-48">
+    <section class="relative bodySize h-screen-minus-48 px-4">
       <div
         class="w-full md:w-1/2 max-w-full flex flex-col items-start justify-center h-full md:pr-10"
       >
@@ -63,11 +64,47 @@ import StatementCard from "@/components/build/StatementCard.astro";
     > -->
     </div>
 
-    <div class="bg-[#A28EDC] " >
-      <section class="bodySize grid grid-cols-1 md:grid-cols-3 gap-6 py-16 px-4">
-        <StatementCard title="OUR MISSION" description="To simplify property searches by offering a user-friendly platform with accurate listings and exceptional support, making finding your perfect home easy and enjoyable." icon={PanelTop} />
-        <StatementCard title="OUR VISION" description="To be the top real estate platform, transforming property searches with innovative technology and global reach, creating a connected and transparent real estate market." icon={Store} />
-        <StatementCard title="OUR CORE VALUES" description="We uphold integrity, embrace innovation, prioritize our users, strive for excellence, and value collaboration." icon={SquareLibrary} />
+    <!-- Statement Section -->
+    <div class="bg-[#A28EDC]">
+      <section
+        class="bodySize grid grid-cols-1 md:grid-cols-3 gap-6 py-20 px-4"
+      >
+        <StatementCard
+          title="OUR MISSION"
+          description="To simplify property searches by offering a user-friendly platform with accurate listings and exceptional support, making finding your perfect home easy and enjoyable."
+          icon={PanelTop}
+        />
+        <StatementCard
+          title="OUR VISION"
+          description="To be the top real estate platform, transforming property searches with innovative technology and global reach, creating a connected and transparent real estate market."
+          icon={Store}
+        />
+        <StatementCard
+          title="OUR CORE VALUES"
+          description="We uphold integrity, embrace innovation, prioritize our users, strive for excellence, and value collaboration."
+          icon={SquareLibrary}
+        />
+      </section>
+    </div>
+
+    <!-- Featured Listings -->
+    <div class="bg-neutral-200">
+      <section
+        class="bodySize py-20 px-4"
+      >
+      <aside class="relative flex items-center justify-center text-footer-bg w-full">
+        <div class="flex-1 border-t border-footer-bg max-w-24"></div>
+        <span class="mx-4 font-bold text-lg">FEATURED LISTING</span>
+        <div class="flex-1 border-t border-footer-bg max-w-24"></div>
+      </aside>
+
+
+      <div class="flex items-center justify-center mt-10">
+        <Button className="rounded-full flex gap-2 items-center" size="lg">
+          See more
+          <ArrowUpRight />
+        </Button>
+      </div>
       </section>
     </div>
   </div>

@@ -1,0 +1,61 @@
+---
+import "@/styles/globals.css";
+import Layout from "../layouts/Layout.astro";
+import houseImage from "@/assets/house-image.jpeg";
+import { Image } from "astro:assets";
+---
+<Layout title="Crest properties - Home">
+  <section class="relative h-full w-full bg-gray-300">
+    <!-- <img src={houseImage as any} alt="House" class="absolute inset-0 w-full h-full object-cover" /> -->
+    <Image src={houseImage} alt="House" class="absolute inset-0 w-full h-full object-cover" />
+
+    
+    <div class="absolute inset-0 clip-path bg-gray-300 opacity-75"></div>
+    
+    <p class="relative z-10 text-7xl text-red-600">Hello.</p>
+  </section>
+  
+</Layout>
+
+  <style>
+    .clip-path {
+      clip-path: polygon(
+        0 0,             /* top-left */
+        0 100%,          /* bottom-left */
+        200px 100%,      /* first cutout bottom-right corner */
+        200px 200px,     /* first cutout top-right corner */
+        400px 200px,     /* skip 200px, next cutout */
+        400px 800px,     /* second cutout bottom-right */
+        600px 800px,     /* second cutout top-right */
+        600px 0,         /* top-right */
+        100% 0,          /* top-right of container */
+        100% 100%,       /* bottom-right of container */
+        0 100%           /* bottom-left of container */
+      );
+    }
+  </style>
+
+<!-- <style>
+  .clip-path {
+    /* Using clip-path to create 3 rectangular cutouts (200px width, 600px height) */
+    clip-path: polygon(
+      0 0,                 /* Top-left of the section */
+      0 100%,              /* Bottom-left of the section */
+      100px 100%,          /* Left of first cutout */
+      100px 200px,         /* Top-left of first cutout */
+      300px 200px,         /* Top-right of first cutout */
+      300px 800px,         /* Bottom-right of first cutout */
+      400px 800px,         /* Left of second cutout */
+      400px 200px,         /* Top-left of second cutout */
+      600px 200px,         /* Top-right of second cutout */
+      600px 800px,         /* Bottom-right of second cutout */
+      700px 800px,         /* Left of third cutout */
+      700px 200px,         /* Top-left of third cutout */
+      900px 200px,         /* Top-right of third cutout */
+      900px 800px,         /* Bottom-right of third cutout */
+      100% 800px,          /* Right edge of the section */
+      100% 0,              /* Top-right of the section */
+      0 0                  /* Closing the polygon */
+    );
+  }
+</style> -->
