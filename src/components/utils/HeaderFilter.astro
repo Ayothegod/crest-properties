@@ -1,0 +1,8 @@
+---
+import FilterController from "./FilterController";
+const { pathname } = Astro.url;
+---
+
+<div>
+  <FilterController client:load pathname={pathname} />
+</div>

@@ -1,10 +1,16 @@
 ---
 import "@/styles/globals.css";
+import Layout from "../layouts/Layout.astro";
 // import { Image } from "astro:assets";
 // import houseImage from "@/assets/house-image.jpeg";
 // import NoBghouseImage from "@/assets/no-bg-removebg-preview.png";
-import Layout from "../layouts/Layout.astro";
-import { Search, PanelTop, Store, SquareLibrary, ArrowUpRight } from "lucide-astro";
+import {
+  Search,
+  PanelTop,
+  Store,
+  SquareLibrary,
+  ArrowUpRight,
+} from "lucide-astro";
 import StatementCard from "@/components/build/StatementCard.astro";
 import { Button } from "@/components/ui/button";
 ---
@@ -89,22 +95,21 @@ import { Button } from "@/components/ui/button";
 
     <!-- Featured Listings -->
     <div class="bg-neutral-200">
-      <section
-        class="bodySize py-20 px-4"
-      >
-      <aside class="relative flex items-center justify-center text-footer-bg w-full">
-        <div class="flex-1 border-t border-footer-bg max-w-24"></div>
-        <span class="mx-4 font-bold text-lg">FEATURED LISTING</span>
-        <div class="flex-1 border-t border-footer-bg max-w-24"></div>
-      </aside>
+      <section class="bodySize py-20 px-4">
+        <aside
+          class="relative flex items-center justify-center text-footer-bg w-full"
+        >
+          <div class="flex-1 border-t border-footer-bg max-w-24"></div>
+          <span class="mx-4 font-bold text-lg">FEATURED LISTING</span>
+          <div class="flex-1 border-t border-footer-bg max-w-24"></div>
+        </aside>
 
-
-      <div class="flex items-center justify-center mt-10">
-        <Button className="rounded-full flex gap-2 items-center" size="lg">
-          See more
-          <ArrowUpRight />
-        </Button>
-      </div>
+        <div class="flex items-center justify-center mt-10">
+          <Button className="rounded-full flex gap-2 items-center" size="lg">
+            See more
+            <ArrowUpRight />
+          </Button>
+        </div>
       </section>
     </div>
   </div>

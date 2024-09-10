@@ -3,12 +3,16 @@ import { AlignRight, ArrowUpRight, ChevronDown } from "lucide-astro";
 import { Button } from "../ui/button";
 import Logo from "./Logo";
 import { navLists } from "@/lib/data";
-
-// console.log("hello")
+const { pathname } = Astro.url;
 ---
 
 <main>
-  <div class={`bg-footer-bg text-white`}>
+  <div
+    class:list={[
+      "bg-listing-header-color",
+      { "bg-footer-bg text-white": pathname === "/" },
+    ]}
+  >
     <div class="bodySize flex items-center justify-between h-14 px-4">
       <Logo />
 
