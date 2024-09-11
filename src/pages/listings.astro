@@ -3,17 +3,17 @@ import "@/styles/globals.css";
 import Layout from "../layouts/Layout.astro";
 import Action from "@/components/build/Action.tsx";
 import { actions } from "astro:actions";
-// import { navigate } from "astro:transitions/client";
+// const user = Astro.locals.user
+// console.log(user)
 
 const { data, error } = await actions.getAllUsers();
-
 if (error) {
   console.log("ERROR");
   // Astro.redirect("/")
   return;
 }
-
 console.log(data);
+
 ---
 
 <Layout title="Crest properties - Home">

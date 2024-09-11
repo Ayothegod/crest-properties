@@ -11,7 +11,7 @@
     "format:astro": "prettier --write \"**/*.astro\"",
     "format": "prettier . --write ",
     "migrate": "prisma migrate dev",
-    "studio":"prisma studio"
+    "studio": "prisma studio"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.3",
@@ -20,6 +20,7 @@
     "@astrojs/tailwind": "^5.1.0",
     "@hookform/resolvers": "^3.9.0",
     "@lucia-auth/adapter-prisma": "^4.0.1",
+    "@node-rs/argon2": "^1.8.3",
     "@prisma/client": "^5.19.1",
     "@radix-ui/react-checkbox": "^1.1.1",
     "@radix-ui/react-label": "^2.1.0",
