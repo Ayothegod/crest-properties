@@ -27,4 +27,8 @@ export default defineConfig({
     react(),
     db(),
   ],
+
+  security: {
+		checkOrigin: true
+	}
 });
