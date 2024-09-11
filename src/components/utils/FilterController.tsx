@@ -44,10 +44,13 @@ export default function FilterController({pathname}: {pathname: string}) {
   const onSubmit = (data: filterSchemaInfered) => {
     console.log("Hello onsubmit");
   };
+
+  const escapeUrls = pathname === "/" || pathname === "/register" || pathname === "/login"
   
   return (
     <div
-    className={`${pathname === "/" && "hidden"} py-2 bg-listing-header-color`}
+    className={`${escapeUrls && "hidden"}
+     py-2 bg-listing-header-color`}
     >
       <div className="bodySize px-4">
         <Form {...form}>

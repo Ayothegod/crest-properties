@@ -6,11 +6,13 @@ import { navLists } from "@/lib/data";
 const { pathname } = Astro.url;
 ---
 
+<!-- "bg-listing-header-color", -->
 <main>
   <div
     class:list={[
-      "bg-listing-header-color",
-      { "bg-footer-bg text-white": pathname === "/" },
+      " bg-footer-bg text-black",
+      { "bg-listing-header-color": pathname === "/listings" },
+      { hidden: pathname === "/register" || pathname === "/login" },
     ]}
   >
     <div class="bodySize flex items-center justify-between h-14 px-4">
