@@ -11,3 +11,10 @@ add auth
 -build auth ui
 finish onvboarding
 start agenets profile
+
+forget password - generate and enter code -> also add rate limit
+true -> fom to update password
+-> back to login
+-> also add
+
+middleware to blog people from viewing some sites

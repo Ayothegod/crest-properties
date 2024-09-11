@@ -15,23 +15,3 @@ export const server = {
     },
   }),
 };
-
-// const getAllUsers = async () => {
-//   const { data, error } = await actions.getAllUsers();
-
-//   if (data) {
-//     // This handles when data is successfully fetched
-//     console.log("Users:", data.data);
-//     return { data: data.data, error: null };
-//   }
-
-//   if (error) {
-//     // Handles the case where there's an error
-//     console.log("Error:", error);
-//     return { data: null, error: error };
-//   }
-
-//   // Handles the case where no data or error is returned
-//   return { data: null, error: "Unknown error" };
-// };
-
