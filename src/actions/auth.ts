@@ -1,6 +1,6 @@
 import { lucia } from "@/auth";
 import { prisma } from "@/lib/prisma";
-import { defineAction } from "astro:actions";
+import { defineAction, ActionError } from "astro:actions";
 import { z } from "astro:schema";
 import { hash } from "@node-rs/argon2";
 import { generateIdFromEntropySize } from "lucia";
@@ -10,12 +10,23 @@ export const auth = {
     input: z.object({
       fullname: z.string(),
       password: z.string(),
-      email: z.string()
+      email: z.string(),
     }),
     async handler(input, context) {
-      try {
-        // TODO: check if user already exists
-        const userId = generateIdFromEntropySize(10); 
+      // try {
+        const checkUser = await prisma.user.findUnique({
+          where: {
+            email: input.email,
+          },
+        });
+        if (checkUser) {
+          throw new ActionError({
+            code: "UNAUTHORIZED",
+            message: "User must be logged in.",
+          });
+        }
+
+        const userId = generateIdFromEntropySize(10);
         const passwordHash = await hash(input.password, {
           memoryCost: 19456,
           timeCost: 2,
@@ -28,19 +39,23 @@ export const auth = {
             fullname: input.fullname,
             password: passwordHash,
             email: input.email,
-            id: userId
-          }
-        })
+            id: userId,
+          },
+        });
         const session = await lucia.createSession(userId, {});
         const sessionCookie = lucia.createSessionCookie(session.id);
-        context.cookies.set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
-      
-        return user
-        // return context.redirect("/")
-      } catch (error) {
-        console.log({ CreateUser: "Error" });
-        return
-      }
+        context.cookies.set(
+          sessionCookie.name,
+          sessionCookie.value,
+          sessionCookie.attributes,
+        );
+
+        return user;
+      // } catch (error) {
+      //   console.log({ CreateUser: "Error" });
+      //   console.log(error);
+      //   return 
+      // }
     },
   }),
   // getUser: defineAction(/* ... */),
