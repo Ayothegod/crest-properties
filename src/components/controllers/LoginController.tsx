@@ -88,7 +88,7 @@ export default function LoginController({}) {
               onClick={() => setShowPassword(!showPassword)}
             />
             <a
-              href="/forgot-password"
+              href="/auth/forgot-password"
               className="text-xs text-footer-bg hover:underline block mt-2"
             >
               Can't access your account?

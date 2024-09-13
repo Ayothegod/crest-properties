@@ -49,7 +49,7 @@ export default function FilterController({ pathname }: { pathname: string }) {
     pathname !== "/" &&
     pathname !== "/register" &&
     pathname !== "/login" &&
-    pathname !== "/forgot-password" &&
+    pathname !== "/auth/forgot-password" &&
     pathname !== "/auth/verify-otp" &&
     pathname !== "/auth/reset-password";
 
