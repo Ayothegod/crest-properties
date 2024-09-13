@@ -122,8 +122,7 @@ export const auth = {
         });
       }
       
-      const userId = generateIdFromEntropySize(10);
-      const session = await lucia.createSession(userId, {});
+      const session = await lucia.createSession(existingUser.id, {});
       const sessionCookie = lucia.createSessionCookie(session.id);
       context.cookies.set(
         sessionCookie.name,
