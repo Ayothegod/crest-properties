@@ -2,26 +2,33 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { registerSchema } from "@/lib/schema";
 import { ActionError, actions } from "astro:actions";
 import { navigate } from "astro:transitions/client";
 import { Loader2, Lock } from "lucide-react";
 import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {  useForm } from "react-hook-form";
+import { z } from "zod";
+
+type RegisterSchemaType = z.infer<typeof registerSchema>;
 
 export default function RegisterController({}) {
   const { toast } = useToast();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [fullname, setFullname] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterSchemaType>({ resolver: zodResolver(registerSchema) });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (input: RegisterSchemaType) => {
     setIsLoading(true);
     const { data, error } = await actions.auth.createUser({
-      email,
-      password,
-      fullname,
+      email: input.email,
+      password: input.password,
+      fullname: input.fullname,
     });
 
     if (error?.code === "UNAUTHORIZED") {
@@ -57,7 +64,10 @@ export default function RegisterController({}) {
   return (
     <div className="px-4">
       <div className=" mt-20 p-4  w-full sm:w-96 sm:mx-auto bg-listing-header-color shadow">
-        <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="w-full flex flex-col gap-4"
+        >
           <h2 className="text-xl font-bold text-center">Join Us Today!</h2>
           <p className="font-medium text-xs text-center">
             Create an account to get started with exploring, listing, and
@@ -69,10 +79,13 @@ export default function RegisterController({}) {
               id="email"
               type="email"
               placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
+              {...register("email")}
             />
+            {errors.email && (
+              <Label className="text-xs text-red-500">
+                {errors.email?.message}
+              </Label>
+            )}
           </div>
           <div className="space-y-2">
             <Label htmlFor="fullname">Fullname</Label>
@@ -80,10 +93,13 @@ export default function RegisterController({}) {
               id="fullname"
               type="text"
               placeholder="Enter your fullname"
-              value={fullname}
-              onChange={(e) => setFullname(e.target.value)}
-              required
+              {...register("fullname")}
             />
+            {errors.fullname && (
+              <Label className="text-xs text-red-500">
+                {errors.fullname?.message}
+              </Label>
+            )}
           </div>
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
@@ -92,15 +108,18 @@ export default function RegisterController({}) {
                 id="password"
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
+                {...register("password")}
                 className=""
               />
               <Lock
                 className="h-4 w-4 absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer"
                 onClick={() => setShowPassword(!showPassword)}
               />
+              {errors.password && (
+                <Label className="text-xs text-red-500">
+                  {errors.password?.message}
+                </Label>
+              )}
             </div>
           </div>
           <Button
@@ -119,7 +138,6 @@ export default function RegisterController({}) {
               to access your dashboard.
             </p>
           </div>
-         
         </form>
       </div>
     </div>
