@@ -54,11 +54,14 @@ export default function LoginController({}) {
   }
 
   return (
-    <div className=" mt-20 p-4 w-full md:w-96 mx-auto bg-listing-header-color shadow">
+    <div className=" mt-20 p-4 w-full sm:w-96 sm:mx-auto bg-listing-header-color shadow">
       <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
-        <h2 className="text-2xl font-bold text-center">Sign In</h2>
+        <h2 className="text-xl font-bold text-center">Welcome Back!</h2>
+        <p className="font-medium text-xs text-center">
+        We're excited to see you again. Log in to your account to manage your properties and explore new opportunities.
+        </p>
         <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">Email Address</Label>
           <Input
             id="email"
             type="email"
@@ -95,14 +98,14 @@ export default function LoginController({}) {
         <Button type="submit" className="w-full">
         {isLoading ? <Loader2 className="animate-spin"/> : "Sign In"}
         </Button>
-        <p className="text-center text-xs">
-          Are you a new user?{" "}
-          <a href="/register">
-            <button type="button" className="text-footer-bg hover:underline">
-              Sign Up
-            </button>
-          </a>
-        </p>
+
+        <div className="text-center mt-8 text-xs">
+          <h5 className="font-bold ">Don't have an account?</h5>
+          <p className="text-xs">
+          <a href="/register" className="text-footer-bg hover:underline">Sign up now</a> and start your journey with us!
+          </p>
+        </div>
+
       </form>
     </div>
   )

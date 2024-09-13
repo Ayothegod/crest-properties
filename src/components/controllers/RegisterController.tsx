@@ -8,50 +8,49 @@ import { Loader2, Lock } from "lucide-react";
 import { useState } from "react";
 
 export default function RegisterController({}) {
-  const { toast } = useToast()
+  const { toast } = useToast();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullname, setFullname] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true)
+    setIsLoading(true);
     const { data, error } = await actions.auth.createUser({
       email,
       password,
       fullname,
     });
 
-    if (error?.code === 'UNAUTHORIZED') {
+    if (error?.code === "UNAUTHORIZED") {
       console.log(error?.message);
       toast({
         title: "Uh oh! Something went wrong.",
         description: `${error?.message}`,
-      })
-      setIsLoading(false)
-      return
+      });
+      setIsLoading(false);
+      return;
     }
-    
+
     if (error) {
       console.log(error);
       toast({
         title: "Uh oh! Something went wrong.",
         description: `Try again later!`,
-      })
-      setIsLoading(false)
+      });
+      setIsLoading(false);
       return;
     }
-    
+
     console.log(data);
     toast({
       title: "🎉 Welcome to Crest Properties.",
       description: `Your account has been successfully created. We're excited to have you onboard!`,
-    })
+    });
 
-    setIsLoading(false)
+    setIsLoading(false);
     navigate("/");
   };
 
@@ -59,9 +58,13 @@ export default function RegisterController({}) {
     <div className="px-4">
       <div className=" mt-20 p-4  w-full sm:w-96 sm:mx-auto bg-listing-header-color shadow">
         <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
-          <h2 className="text-2xl font-bold text-center">Sign Up</h2>
+          <h2 className="text-xl font-bold text-center">Join Us Today!</h2>
+          <p className="font-medium text-xs text-center">
+            Create an account to get started with exploring, listing, and
+            managing properties. It only takes a few minutes!
+          </p>
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">Email Address</Label>
             <Input
               id="email"
               type="email"
@@ -100,17 +103,23 @@ export default function RegisterController({}) {
               />
             </div>
           </div>
-          <Button type="submit" className="w-full flex items-center justify-center">
-            {isLoading ? <Loader2 className="animate-spin"/> : "Sign Up"}
+          <Button
+            type="submit"
+            className="w-full flex items-center justify-center"
+          >
+            {isLoading ? <Loader2 className="animate-spin" /> : "Sign Up"}
           </Button>
-          <p className="text-center text-xs">
-            Already have an account?{" "}
-            <a href="/login">
-              <button type="button" className="text-footer-bg hover:underline">
-                Sign In
-              </button>
-            </a>
-          </p>
+
+          <div className="text-center mt-2">
+            <h5 className="font-bold text-xs">Already have an account?</h5>
+            <p className="text-xs">
+              <a href="/login" className="text-footer-bg hover:underline">
+                Log in here{" "}
+              </a>
+              to access your dashboard.
+            </p>
+          </div>
+         
         </form>
       </div>
     </div>

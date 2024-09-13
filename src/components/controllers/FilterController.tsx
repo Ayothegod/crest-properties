@@ -49,45 +49,45 @@ export default function FilterController({ pathname }: { pathname: string }) {
     pathname !== "/" &&
     pathname !== "/register" &&
     pathname !== "/login" &&
-    pathname !== "/forgot-password";
+    pathname !== "/forgot-password" &&
+    pathname !== "/auth/verify-otp" &&
+    pathname !== "/auth/reset-password";
 
   return (
     <>
       {escapeUrls && (
-          <div
-            className={`py-2 bg-listing-header-color`}
-          >
-            <div className="bodySize px-4">
-              <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className="hidden md:flex flex-wrap items-center justify-evenly gap-4"
-                >
-                  <FormField
-                    control={form.control}
-                    name="search"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormControl>
-                          <Input
-                            placeholder="Search location or area"
-                            {...field}
-                            className="rounded-full w-max"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+        <div className={`py-2 bg-listing-header-color`}>
+          <div className="bodySize px-4">
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="hidden md:flex flex-wrap items-center justify-evenly gap-4"
+              >
+                <FormField
+                  control={form.control}
+                  name="search"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          placeholder="Search location or area"
+                          {...field}
+                          className="rounded-full w-max"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-                  <Button type="submit" className="rounded-full">
-                    Submit
-                  </Button>
-                </form>
-              </Form>
-            </div>
+                <Button type="submit" className="rounded-full">
+                  Submit
+                </Button>
+              </form>
+            </Form>
           </div>
-        )}
+        </div>
+      )}
     </>
   );
 }
