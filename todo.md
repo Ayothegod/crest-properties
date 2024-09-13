@@ -30,17 +30,63 @@ middleware to blog people from viewing some sites
 
 - generate 
 
-<!-- <div>
-<h2>Hi `${existingUser.fullname}`</h2>
-<br/>
-<p>We received a request related to your account. Please note that this request will expire in 30 minutes. If you do not complete the required 
-action before this time, you may need to initiate the process again.</p>
-<br/>
-<p>If you didn’t make this request, you can safely ignore this email.</p>
-<br/>
-<p>Thank you for being part of Crest Properties!</p>
-<br/>
-<br/>
-<p>Best regards,</p>
-<h4>The Crest Properties Team</h4>
-</div> -->
+
+
+
+
+
+
+
+
+
+
+
+model Otp {
+  id        String   @id
+  userId    String
+  otp       String
+  expiresAt DateTime
+  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
+}
+
+const otp = generateOTP(6);
+const expiresAt = new Date(Date.now() + 30 * 60 * 1000); // 30 minutes from now
+const databaseOtp = await prisma.otp.create({
+  data: {
+    otp: otp,
+    userId: existingUser.id,
+    expiresAt: expiresAt,
+  },
+});
+
+const Queue = require('bull');
+const prisma = require('@prisma/client').PrismaClient;
+const db = new prisma();
+
+// Create a Bull queue
+const cleanupQueue = new Queue('cleanupQueue');
+
+// Add a job to clean up expired OTPs
+function scheduleCleanup() {
+  cleanupQueue.add(
+    {}, // No data needed for this job
+    { repeat: { every: 5 * 60 * 1000 } } // Run every 5 minutes
+  );
+}
+
+// Process the cleanup queue
+cleanupQueue.process(async () => {
+  try {
+    await db.otp.deleteMany({
+      where: {
+        expiresAt: { lt: new Date() } // Delete OTPs where expiration time is less than now
+      },
+    });
+    console.log('Expired OTPs deleted successfully.');
+  } catch (error) {
+    console.error('Error deleting expired OTPs:', error);
+  }
+});
+
+// Schedule cleanup when starting your app
+scheduleCleanup();

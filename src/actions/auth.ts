@@ -180,16 +180,16 @@ export const auth = {
             await prisma.otp.delete({
               where: { id: otpToDelete.id },
             });
-            console.log(`Item ${otpToDelete.id} deleted successfully.`);
+            console.log(`Otp with id ${otpToDelete.id} deleted successfully.`);
           } catch (error) {
             console.error(`Error deleting item ${otpToDelete.id}:`, error);
           }
         } else {
-          console.log("Item not found.");
+          console.log("Otp not found.");
         }
       }
 
-      setInterval(deleteScheduledItems, 10 * 60 * 1000);
+      setInterval(deleteScheduledItems, 5 * 60 * 1000);
 
       // SEND OTP TO CLIENT
       const mailgun = new Mailgun(FormData);
@@ -230,7 +230,37 @@ export const auth = {
           console.error(err);
         });
 
-      return "databaseOtp";
+      return "Success";
+    },
+  }),
+  verifyOtp: defineAction({
+    input: z.object({
+      otp: z.string(),
+    }),
+    async handler(input, context) {
+      const existingOtp = await prisma.otp.findUnique({
+        where: {
+          otp: input.otp,
+        },
+      });
+      if (!existingOtp) {
+        throw new ActionError({
+          code: "FORBIDDEN",
+          message:
+            "OTP is either incorrect or expired. Please request a new one and try again.",
+        });
+      }
+      // async function deleteScheduledItems() {
+      //   if (existingOtp) {
+      //     await prisma.otp.delete({
+      //       where: { id: existingOtp.id },
+      //     });
+      //     console.log(`Used Otp deleted successfully.`);
+      //   }
+      // }
+      // setInterval(deleteScheduledItems, 1 * 60 * 1000);
+
+      return "Success";
     },
   }),
 };

@@ -14,38 +14,38 @@ export default function VerifyOtpController({}) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // setIsLoading(true);
-    // const { data, error } = await actions.auth.requestOTP({
-    //   email,
-    // });
+    setIsLoading(true);
+    const { data, error } = await actions.auth.verifyOtp({
+      otp,
+    });
 
-    // if (error?.code === "FORBIDDEN") {
-    //   console.log(error?.message);
-    //   toast({
-    //     title: "⚠️ Login Failed.",
-    //     description: `${error?.message}`,
-    //   });
-    //   setIsLoading(false);
-    //   return;
-    // }
+    if (error?.code === "FORBIDDEN") {
+      console.log(error?.message);
+      toast({
+        title: "⚠️ OTP Error.",
+        description: `${error?.message}`,
+      });
+      setIsLoading(false);
+      return;
+    }
 
-    // if (error) {
-    //   console.log(error);
-    //   toast({
-    //     title: "Uh oh! Something went wrong.",
-    //     description: `Try again later!`,
-    //   });
-    //   setIsLoading(false);
-    //   return;
-    // }
+    if (error) {
+      console.log(error);
+      toast({
+        title: "Uh oh! Something went wrong.",
+        description: `Try again later!`,
+      });
+      setIsLoading(false);
+      return;
+    }
 
-    // console.log(data);
-    // toast({
-    //   title: "✅ Login Successful",
-    //   description: `Welcome back! You have successfully logged in.`,
-    // });
+    console.log(data);
+    toast({
+      title: "✅ OTP Success",
+      description: `OTP verified successfully! You can now proceed.`,
+    });
 
-    // setIsLoading(false);
+    setIsLoading(false);
     navigate("/auth/reset-password");
   };
 
@@ -54,7 +54,8 @@ export default function VerifyOtpController({}) {
       <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
         <h2 className="text-xl font-bold text-center">Verify Your Account</h2>
         <p className="font-medium text-xs text-center">
-        We’ve sent a One-Time Password (OTP) to your email. Enter the code below to verify your account.
+          We’ve sent a One-Time Password (OTP) to your email. Enter the code
+          below to verify your account.
         </p>
         <div className="space-y-2">
           <Label htmlFor="email">Enter OTP</Label>
@@ -73,7 +74,9 @@ export default function VerifyOtpController({}) {
 
         <div className="text-center mt-8">
           <h5 className="font-bold text-xs">Didn’t receive the code?</h5>
-            <Button variant="link" size="sm" className="text-footer-bg ">Resend OTP</Button>
+          <Button variant="link" size="sm" className="text-footer-bg ">
+            Resend OTP
+          </Button>
         </div>
       </form>
     </div>
