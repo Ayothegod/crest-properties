@@ -6,6 +6,8 @@ import { hash, verify } from "@node-rs/argon2";
 import { generateIdFromEntropySize } from "lucia";
 import Mailgun from "mailgun.js";
 import FormData from "form-data";
+import { generateOTP } from "@/lib/services";
+import Queue from "bull";
 
 export const auth = {
   createUser: defineAction({
@@ -52,9 +54,6 @@ export const auth = {
         sessionCookie.value,
         sessionCookie.attributes,
       );
-
-      console.log(import.meta.env.MAILGUN_API_KEY);
-      console.log(import.meta.env.MAILGUN_DOMAIN_NAME);
 
       const mailgun = new Mailgun(FormData);
       const mg = mailgun.client({
@@ -121,7 +120,7 @@ export const auth = {
           message: "Incorrect username or password. Please try again.",
         });
       }
-      
+
       const session = await lucia.createSession(existingUser.id, {});
       const sessionCookie = lucia.createSessionCookie(session.id);
       context.cookies.set(
@@ -142,18 +141,96 @@ export const auth = {
         where: {
           email: input.email,
         },
+        include: {
+          otp: true,
+          profile: true,
+        },
       });
       if (!existingUser) {
         throw new ActionError({
           code: "FORBIDDEN",
-          message: "Incorrect username or password. Please try again.",
+          message: "Incorrect email. Please try again.",
         });
       }
-      
-      return existingUser;
+
+      if (existingUser.otp) {
+        throw new ActionError({
+          code: "TOO_MANY_REQUESTS",
+          message: "Incorrect email. Please try again.",
+        });
+      }
+
+      const otp = generateOTP(6);
+      const databaseOtp = await prisma.otp.create({
+        data: {
+          otp: otp,
+          userId: existingUser.id,
+        },
+      });
+
+      async function deleteScheduledItems() {
+        const otpToDelete = await prisma.otp.findUnique({
+          where: {
+            id: databaseOtp.id,
+          },
+        });
+
+        if (otpToDelete) {
+          try {
+            await prisma.otp.delete({
+              where: { id: otpToDelete.id },
+            });
+            console.log(`Item ${otpToDelete.id} deleted successfully.`);
+          } catch (error) {
+            console.error(`Error deleting item ${otpToDelete.id}:`, error);
+          }
+        } else {
+          console.log("Item not found.");
+        }
+      }
+
+      setInterval(deleteScheduledItems, 10 * 60 * 1000);
+
+      // SEND OTP TO CLIENT
+      const mailgun = new Mailgun(FormData);
+      const mg = mailgun.client({
+        username: "api",
+        key: import.meta.env.MAILGUN_API_KEY,
+      });
+      const data = {
+        from: "crestproperties@coldmetal.com",
+        to: [`${input.email}`],
+        subject: "Action Required: Your Request Will Expire in 5 Minutes",
+        html: `
+          <div>
+        <h2>Hi ${existingUser.fullname},</h2>
+        <br/>
+        <p>We received a request related to your account. Please note that this request will expire in 5 minutes. If you do not complete the required
+        action before this time, you may need to initiate the process again.</p>
+        <p>OTP code: ${databaseOtp.otp}</p>
+        <br/>
+        <p>If you didn’t make this request, you can safely ignore this email.</p>
+        <br/>
+        <p>Thank you for being part of Crest Properties!</p>
+        <br/>
+        <br/>
+        <p>Best regards,</p>
+        <h4>The Crest Properties Team</h4>
+      </div>
+          `,
+      };
+
+      mg.messages
+        .create(import.meta.env.MAILGUN_DOMAIN_NAME, data)
+        .then((msg) => {
+          console.log(msg);
+          // console.log(mailResult);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+
+      return "databaseOtp";
     },
   }),
-
-
-  // getUser: defineAction(/* ... */),
 };

@@ -14,38 +14,41 @@ export default function ForgotPasswordController({}) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // setIsLoading(true);
-    // const { data, error } = await actions.auth.requestOTP({
-    //   email,
-    // });
+    setIsLoading(true);
+    const { data, error } = await actions.auth.requestOTP({
+      email,
+    });
 
-    // if (error?.code === "FORBIDDEN") {
-    //   console.log(error?.message);
-    //   toast({
-    //     title: "⚠️ Login Failed.",
-    //     description: `${error?.message}`,
-    //   });
-    //   setIsLoading(false);
-    //   return;
-    // }
+    toast({
+      description: `If an account with that email exists, you will receive an OTP shortly.`,
+    });
 
-    // if (error) {
-    //   console.log(error);
-    //   toast({
-    //     title: "Uh oh! Something went wrong.",
-    //     description: `Try again later!`,
-    //   });
-    //   setIsLoading(false);
-    //   return;
-    // }
+    if (error?.code === 'TOO_MANY_REQUESTS') {
+      console.log(error?.message);
+      toast({
+        title: "OTP Request Cooldown",
+        description: `It looks like you've recently requested an OTP. Please wait a few more minutes before requesting another one.`,
+      })
+      setIsLoading(false)
+      return
+    }
 
-    // console.log(data);
-    // toast({
-    //   title: "✅ Login Successful",
-    //   description: `Welcome back! You have successfully logged in.`,
-    // });
+    if (error) {
+      console.log(error);
+      toast({
+        title: "Uh oh! Something went wrong.",
+        description: `Try again later!`,
+      });
+      setIsLoading(false);
+      return;
+    }
 
-    // setIsLoading(false);
+    console.log(data);
+    toast({
+      description: `OTP code sent successfully.`,
+    });
+
+    setIsLoading(false);
     navigate("/auth/verify-otp");
   };
 
@@ -54,7 +57,8 @@ export default function ForgotPasswordController({}) {
       <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
         <h2 className="text-xl font-bold text-center">Forgot Password</h2>
         <p className="font-medium text-xs text-center">
-          Enter the email address associated with your account, and we’ll send you a link to reset your password.
+          Enter the email address associated with your account, and we’ll send
+          you a One-Time Password (OTP) to reset your password.
         </p>
         <div className="space-y-2">
           <Label htmlFor="email">Email Address</Label>
@@ -76,17 +80,23 @@ export default function ForgotPasswordController({}) {
           <p className="text-xs">
             Check your spam folder or try again after a few minutes. Still
             having trouble?{" "}
-            <a href="mailto:crestproperties@coldmetal.com" className="text-footer-bg hover:underline">Contact support.</a>
+            <a
+              href="mailto:crestproperties@coldmetal.com"
+              className="text-footer-bg hover:underline"
+            >
+              Contact support.
+            </a>
           </p>
         </div>
 
         <div className="text-center">
           <h5 className="font-bold text-xs">Remembered your password?</h5>
           <p className="text-xs">
-            <a href="/login" className="text-footer-bg hover:underline">Log in here.</a>
+            <a href="/login" className="text-footer-bg hover:underline">
+              Log in here.
+            </a>
           </p>
         </div>
-
       </form>
     </div>
   );

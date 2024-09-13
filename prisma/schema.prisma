@@ -16,6 +16,8 @@ model User {
   email    String    @unique
   password String
   sessions Session[]
+  otp      Otp?
+  profile  Profile?
 }
 
 model Session {
@@ -24,4 +26,19 @@ model Session {
   expiresAt DateTime
 
   user User @relation(references: [id], fields: [userId], onDelete: Cascade)
+}
+
+model Otp {
+  id                  String    @id @default(uuid())
+  otp                 String    @unique
+  scheduledDeletionAt DateTime?
+  userId              String    @unique
+  user                User      @relation(references: [id], fields: [userId], onDelete: Cascade)
+}
+
+model Profile {
+  id     String @id @default(uuid())
+  bio    String
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
