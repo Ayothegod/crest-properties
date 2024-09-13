@@ -1,19 +1,24 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
 import { ActionError, actions } from "astro:actions";
-import { Lock } from "lucide-react";
+import { navigate } from "astro:transitions/client";
+import { Loader2, Lock } from "lucide-react";
 import { useState } from "react";
 
 export default function RegisterController({}) {
+  const { toast } = useToast()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullname, setFullname] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(email, password);
+    setIsLoading(true)
     const { data, error } = await actions.auth.createUser({
       email,
       password,
@@ -21,18 +26,33 @@ export default function RegisterController({}) {
     });
 
     if (error?.code === 'UNAUTHORIZED') {
-      console.log("ERROR");
       console.log(error?.message);
+      toast({
+        title: "Uh oh! Something went wrong.",
+        description: `${error?.message}`,
+      })
+      setIsLoading(false)
       return
     }
     
     if (error) {
       console.log(error);
+      toast({
+        title: "Uh oh! Something went wrong.",
+        description: `Try again later!`,
+      })
+      setIsLoading(false)
       return;
     }
     
-    console.log({data});
-    // navigate("/");
+    console.log(data);
+    toast({
+      title: "🎉 Welcome to Crest Properties.",
+      description: `Your account has been successfully created. We're excited to have you onboard!`,
+    })
+
+    setIsLoading(false)
+    navigate("/");
   };
 
   return (
@@ -80,8 +100,8 @@ export default function RegisterController({}) {
               />
             </div>
           </div>
-          <Button type="submit" className="w-full">
-            Sign Up
+          <Button type="submit" className="w-full flex items-center justify-center">
+            {isLoading ? <Loader2 className="animate-spin"/> : "Sign Up"}
           </Button>
           <p className="text-center text-xs">
             Already have an account?{" "}
