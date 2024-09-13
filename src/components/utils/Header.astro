@@ -12,7 +12,7 @@ const { pathname } = Astro.url;
     class:list={[
       " bg-footer-bg text-black",
       { "bg-listing-header-color": pathname === "/listings" },
-      { hidden: pathname === "/register" || pathname === "/login" },
+      { hidden: pathname === "/register" || pathname === "/login" || pathname === "/forgot-password" },
     ]}
   >
     <div class="bodySize flex items-center justify-between h-14 px-4">

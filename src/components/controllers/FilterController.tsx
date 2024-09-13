@@ -45,7 +45,7 @@ export default function FilterController({pathname}: {pathname: string}) {
     console.log("Hello onsubmit");
   };
 
-  const escapeUrls = pathname === "/" || pathname === "/register" || pathname === "/login"
+  const escapeUrls = pathname === "/" || pathname === "/register" || pathname === "/login" || pathname === "/forgot-password"
   
   return (
     <div

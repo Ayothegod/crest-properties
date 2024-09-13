@@ -133,6 +133,27 @@ export const auth = {
       return existingUser;
     },
   }),
+  requestOTP: defineAction({
+    input: z.object({
+      email: z.string(),
+    }),
+    async handler(input, context) {
+      const existingUser = await prisma.user.findUnique({
+        where: {
+          email: input.email,
+        },
+      });
+      if (!existingUser) {
+        throw new ActionError({
+          code: "FORBIDDEN",
+          message: "Incorrect username or password. Please try again.",
+        });
+      }
+      
+      return existingUser;
+    },
+  }),
+
 
   // getUser: defineAction(/* ... */),
 };

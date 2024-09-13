@@ -8,19 +8,16 @@ import { actions } from 'astro:actions'
 import { useToast } from '@/hooks/use-toast'
 import { navigate } from 'astro:transitions/client'
 
-export default function LoginController({}) {
+export default function ForgotPassword({}) {
   const { toast } = useToast()
   const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    const { data, error } = await actions.auth.loginUser({
-      email,
-      password,
+    const { data, error } = await actions.auth.requestOTP({
+      email
     });
 
     if (error?.code === 'FORBIDDEN') {
@@ -56,7 +53,8 @@ export default function LoginController({}) {
   return (
     <div className=" mt-20 p-4 w-full md:w-96 mx-auto bg-listing-header-color shadow">
       <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
-        <h2 className="text-2xl font-bold text-center">Sign In</h2>
+        <h2 className="text-2xl font-bold text-center">Forgot Password</h2>
+        <p className="font-medium"></p>
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
           <Input
@@ -68,38 +66,14 @@ export default function LoginController({}) {
             required
           />
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
-          <div className="relative">
-            <Input
-              id="password"
-              type={showPassword ? "text" : "password"}
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className=""
-            />
-            <Lock
-              className="h-4 w-4 absolute right-2 top-1/3 transform -translate-y-1/2 text-gray-500 cursor-pointer"
-              onClick={() => setShowPassword(!showPassword)}
-            />
-            <a
-              href="/forgot-password"
-              className="text-xs text-footer-bg hover:underline block mt-2"
-            >
-              Can't access your account?
-            </a>
-          </div>
-        </div>
         <Button type="submit" className="w-full">
-        {isLoading ? <Loader2 className="animate-spin"/> : "Sign In"}
+        {isLoading ? <Loader2 className="animate-spin"/> : "Request OTP"}
         </Button>
         <p className="text-center text-xs">
-          Are you a new user?{" "}
-          <a href="/register">
+          Want to sign-in instead?{" "}
+          <a href="/login">
             <button type="button" className="text-footer-bg hover:underline">
-              Sign Up
+              Sign In
             </button>
           </a>
         </p>
