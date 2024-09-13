@@ -4,60 +4,61 @@ import { Button } from "../ui/button";
 import Logo from "./Logo";
 import { navLists } from "@/lib/data";
 const { pathname } = Astro.url;
+
+const escapeUrls =
+    pathname !== "/" &&
+    pathname !== "/register" &&
+    pathname !== "/login" &&
+    pathname !== "/forgot-password";
 ---
 
-<!-- "bg-listing-header-color", -->
-<main>
-  <div
-    class:list={[
-      " bg-footer-bg text-black",
-      { "bg-listing-header-color": pathname === "/listings" },
-      { hidden: pathname === "/register" || pathname === "/login" || pathname === "/forgot-password" },
-    ]}
-  >
-    <div class="bodySize flex items-center justify-between h-14 px-4">
-      <Logo />
+{escapeUrls && (
+      <main>
+        <div
+          class:list={[
+            " bg-footer-bg text-black",
+            { "bg-listing-header-color": pathname === "/listings" },
+          ]}
+        >
+          <div class="bodySize flex items-center justify-between h-14 px-4">
+            <Logo />
 
-      <div class="hidden md:flex">
-        <ul class="flex items-center gap-8 text-sm">
-          {
-            navLists.map((item) => (
-              <div>
-                {item.isButton && item.withIcon && (
-                  <a href={item.url}>
-                    <Button className="rounded-full flex gap-2 items-center">
-                      {item.title}
-                      <ArrowUpRight />
-                    </Button>
-                  </a>
-                )}
-                {/* ${
-                      location.pathname == item.url && "border-b border-b-black"
-                    }
-                    */}
+            <div class="hidden md:flex">
+              <ul class="flex items-center gap-8 text-sm">
+                {navLists.map((item) => (
+                  <div>
+                    {item.isButton && item.withIcon && (
+                      <a href={item.url}>
+                        <Button className="rounded-full flex gap-2 items-center">
+                          {item.title}
+                          <ArrowUpRight />
+                        </Button>
+                      </a>
+                    )}
 
-                {!item.isButton && item.withIcon && (
-                  <a href={item.url} class={``}>
-                    <li class="flex items-center">
-                      {item.title} <ChevronDown />
-                    </li>
-                  </a>
-                )}
+                    {!item.isButton && item.withIcon && (
+                      <a href={item.url} class={``}>
+                        <li class="flex items-center">
+                          {item.title} <ChevronDown />
+                        </li>
+                      </a>
+                    )}
 
-                {!item.isButton && !item.iconName && (
-                  <a href={item.url} class={``}>
-                    <li>{item.title}</li>
-                  </a>
-                )}
-              </div>
-            ))
-          }
-        </ul>
-      </div>
+                    {!item.isButton && !item.iconName && (
+                      <a href={item.url} class={``}>
+                        <li>{item.title}</li>
+                      </a>
+                    )}
+                  </div>
+                ))}
+              </ul>
+            </div>
 
-      <div class="md:hidden">
-        <AlignRight />
-      </div>
-    </div>
-  </div>
-</main>
+            <div class="md:hidden">
+              <AlignRight />
+            </div>
+          </div>
+        </div>
+      </main>
+    )
+}

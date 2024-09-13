@@ -35,7 +35,7 @@ import React from "react";
 
 type filterSchemaInfered = z.infer<typeof filterSchema>;
 
-export default function FilterController({pathname}: {pathname: string}) {
+export default function FilterController({ pathname }: { pathname: string }) {
   const { toast } = useToast();
   const form = useForm<filterSchemaInfered>({
     resolver: zodResolver(filterSchema),
@@ -45,42 +45,49 @@ export default function FilterController({pathname}: {pathname: string}) {
     console.log("Hello onsubmit");
   };
 
-  const escapeUrls = pathname === "/" || pathname === "/register" || pathname === "/login" || pathname === "/forgot-password"
-  
-  return (
-    <div
-    className={`${escapeUrls && "hidden"}
-     py-2 bg-listing-header-color`}
-    >
-      <div className="bodySize px-4">
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="hidden md:flex flex-wrap items-center justify-evenly gap-4"
-          >
-            <FormField
-              control={form.control}
-              name="search"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      placeholder="Search location or area"
-                      {...field}
-                      className="rounded-full w-max"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+  const escapeUrls =
+    pathname !== "/" &&
+    pathname !== "/register" &&
+    pathname !== "/login" &&
+    pathname !== "/forgot-password";
 
-            <Button type="submit" className="rounded-full">
-              Submit
-            </Button>
-          </form>
-        </Form>
-      </div>
-    </div>
+  return (
+    <>
+      {escapeUrls && (
+          <div
+            className={`py-2 bg-listing-header-color`}
+          >
+            <div className="bodySize px-4">
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmit)}
+                  className="hidden md:flex flex-wrap items-center justify-evenly gap-4"
+                >
+                  <FormField
+                    control={form.control}
+                    name="search"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            placeholder="Search location or area"
+                            {...field}
+                            className="rounded-full w-max"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <Button type="submit" className="rounded-full">
+                    Submit
+                  </Button>
+                </form>
+              </Form>
+            </div>
+          </div>
+        )}
+    </>
   );
 }
