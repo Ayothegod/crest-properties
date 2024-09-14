@@ -11,7 +11,8 @@
     "format:astro": "prettier --write \"**/*.astro\"",
     "format": "prettier . --write ",
     "migrate": "prisma migrate dev",
-    "studio": "prisma studio"
+    "studio": "prisma studio",
+    "push":"prisma db push"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.3",

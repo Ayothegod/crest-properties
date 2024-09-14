@@ -18,6 +18,30 @@ import { Image } from "astro:assets";
 
     <p class="relative z-10 text-7xl text-red-600">Hello.</p>
   </section>
+
+
+
+  <div>
+    Welcome to Your Agent Dashboard
+As a trusted property agent, you can easily list properties for rent, sale, or investment opportunities. Start by adding your first property and showcase it to thousands of potential buyers or renters.
+
+Let’s Get Started with Your First Listing
+It’s quick and easy to list your property. Simply follow these steps:
+
+Add Property Details – Tell us about the property type, location, and features.
+Upload Photos – High-quality images attract more interest. Add clear photos to show off the property.
+Set Your Price – Enter the price or rental rate that matches the market.
+Publish and Promote – Reach your target audience instantly once your property is listed.
+Why List with Us?
+Wide Audience Reach: Get your property in front of the right buyers or renters.
+Easy Management: Update, edit, or manage your listings anytime from your dashboard.
+Support at Every Step: Have questions or need assistance? Our team is here to help you every step of the way.
+Ready to make your first listing? Click the button below to start now!
+
+List Your First Property
+
+
+  </div>
 </Layout>
 
 <style>
@@ -62,3 +86,144 @@ import { Image } from "astro:assets";
     );
   }
 </style> -->
+
+const property = await prisma.property.create({
+  data: {
+    title,
+    description,
+    price: parseFloat(price),
+    location,
+    propertyType,
+    availableFor,
+    agent: { connect: { id: agentId } }
+  }
+});
+
+import React, { useState } from 'react';
+import axios from 'axios';
+
+// Sample agent data (you would fetch this from your API)
+const agentId = 1;
+
+const PropertyForm = () => {
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    price: '',
+    location: '',
+    propertyType: 'HOUSE',
+    availableFor: 'RENT',
+  });
+
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post('/api/properties', {
+        ...formData,
+        agentId,
+      });
+
+      setSuccessMessage('Property listed successfully!');
+      setErrorMessage('');
+      setFormData({
+        title: '',
+        description: '',
+        price: '',
+        location: '',
+        propertyType: 'HOUSE',
+        availableFor: 'RENT',
+      });
+    } catch (error) {
+      setErrorMessage('Failed to list property. Please try again.');
+      setSuccessMessage('');
+    }
+  };
+
+  return (
+    <div>
+      <h2>List Your First Property</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Title</label>
+          <input
+            type="text"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div>
+          <label>Description</label>
+          <textarea
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div>
+          <label>Price</label>
+          <input
+            type="number"
+            name="price"
+            value={formData.price}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div>
+          <label>Location</label>
+          <input
+            type="text"
+            name="location"
+            value={formData.location}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div>
+          <label>Property Type</label>
+          <select
+            name="propertyType"
+            value={formData.propertyType}
+            onChange={handleChange}
+          >
+            <option value="HOUSE">House</option>
+            <option value="APARTMENT">Apartment</option>
+            <option value="CONDO">Condo</option>
+            <option value="STUDIO">Studio</option>
+          </select>
+        </div>
+        <div>
+          <label>Available For</label>
+          <select
+            name="availableFor"
+            value={formData.availableFor}
+            onChange={handleChange}
+          >
+            <option value="RENT">Rent</option>
+            <option value="SALE">Sale</option>
+          </select>
+        </div>
+        <button type="submit">List Property</button>
+      </form>
+
+      {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
+      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+    </div>
+  );
+};
+
+export default PropertyForm;

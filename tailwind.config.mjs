@@ -13,6 +13,7 @@ export default {
         'screen-minus-48': 'calc(100vh - 48px)',
       },
       colors: {
+        "set-foreground":"#FAFAFA",
         "listing-header-color": "#F1F1F1",
         "listing-body": "#EDEDEC",
         "footer-bg": "#5028A7",
