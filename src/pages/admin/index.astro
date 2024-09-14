@@ -1,14 +1,23 @@
 ---
-import AgentLayout from "@/layouts/AgentLayout.astro"
-import {Button} from "@/components/ui/button"
+import AgentLayout from "@/layouts/AgentLayout.astro";
+import { Button } from "@/components/ui/button";
+
+const user = Astro.locals.user;
+console.log(user);
+if (!user) {
+  return Astro.rewrite("/login");
+}
 ---
 
 <AgentLayout>
   <div class="bg-set-foreground w-full h-full p-1">
-    <div class="w-full p-4 shadow-sm bg-white flex items-center justify-between">
+    <div
+      class="w-full p-4 shadow-sm bg-white flex items-center justify-between"
+    >
       <div class="">
         <h2 class="font-medium">Welcome to Your Agent Dashboard</h2>
-        <p class="text-sm text-neutral-400">It’s quick and easy to list your property. Simply follow these steps:
+        <p class="text-sm text-neutral-400">
+          It’s quick and easy to list your property. Simply follow these steps:
         </p>
       </div>
 

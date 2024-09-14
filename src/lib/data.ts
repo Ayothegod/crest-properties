@@ -68,7 +68,7 @@ export const navLists: NavList[] = [
   {
     id: 6,
     title: "List property",
-    url: "/list",
+    url: "/admin",
     withIcon: true,
     isButton: true,
     children: false,

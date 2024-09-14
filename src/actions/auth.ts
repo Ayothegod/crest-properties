@@ -25,7 +25,6 @@ export const auth = {
       email: z.string(),
     }),
     async handler(input, context) {
-      // try {
       const checkUser = await prisma.user.findUnique({
         where: {
           email: input.email,
@@ -52,7 +51,7 @@ export const auth = {
           fullname: input.fullname,
           password: passwordHash,
           email: input.email,
-          id: userId,
+          id: userId
         },
       });
       const session = await lucia.createSession(userId, {});
@@ -74,21 +73,16 @@ export const auth = {
         to: [`${input.email}`],
         subject: "Welcome to Crest Properties",
         html: `<h1><strong>Welcome to Crest Properties</strong></h1>
-    <p>You're so in!</p>`,
+                 <p>You're so in!</p>`,
       };
-      let mailResult = "PENDING";
-      console.log(mailResult);
 
       mg.messages
         .create(import.meta.env.MAILGUN_DOMAIN_NAME, data)
         .then((msg) => {
           console.log(msg);
-          mailResult = "SENT";
-          // console.log(mailResult);
         })
         .catch((err) => {
           console.error(err);
-          mailResult = "FAILED";
         });
 
       return user;
@@ -310,17 +304,20 @@ export const auth = {
       if (!context.locals.session) {
         throw new ActionError({
           code: "BAD_REQUEST",
-          message:
-            "User is already logged out.",
+          message: "User is already logged out.",
         });
       }
-    
+
       await lucia.invalidateSession(context.locals.session.id);
-    
+
       const sessionCookie = lucia.createBlankSessionCookie();
-      context.cookies.set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
-    
-      return
+      context.cookies.set(
+        sessionCookie.name,
+        sessionCookie.value,
+        sessionCookie.attributes,
+      );
+
+      return;
     },
   }),
 };

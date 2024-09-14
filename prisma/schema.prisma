@@ -11,45 +11,45 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  id        String    @id @default(uuid()) @map("_id")
   fullname  String?
   email     String    @unique
   password  String
-  sessions  Session[]
   otp       Otp?
   profile   Profile?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+  sessions  Session[]
 }
 
 model Session {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(uuid()) @map("_id")
   expiresAt DateTime
-  userId    String   @db.ObjectId
+  userId    String   
   user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
 
 model Otp {
-  id                  String    @id @default(auto()) @map("_id") @db.ObjectId
+  id                  String    @id @default(uuid()) @map("_id")
   otp                 String    @unique
   scheduledDeletionAt DateTime?
-  userId              String    @unique @db.ObjectId
+  userId              String    @unique 
   user                User      @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
 
 model Profile {
-  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  id          String     @id @default(uuid()) @map("_id")
   bio         String
   phoneNumber String?
   properties  Property[]
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
-  userId      String     @unique @db.ObjectId
+  userId      String     @unique
   user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Property {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  id           String   @id @default(uuid()) @map("_id")
   title        String
   description  String
   price        Float
@@ -57,7 +57,7 @@ model Property {
   propertyType PropertyType // HOUSE, APARTMENT, CONDO, STUDIO
   features     String[] // "Pool", "Garage"
   availableFor AvailableFor // RENT, SALE
-  agentId      String   @db.ObjectId
+  agentId      String   
   agent        Profile  @relation(fields: [agentId], references: [id])
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt

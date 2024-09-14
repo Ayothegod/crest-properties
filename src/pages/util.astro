@@ -87,7 +87,7 @@ List Your First Property
   }
 </style> -->
 
-const property = await prisma.property.create({
+<!-- const property = await prisma.property.create({
   data: {
     title,
     description,
@@ -97,14 +97,12 @@ const property = await prisma.property.create({
     availableFor,
     agent: { connect: { id: agentId } }
   }
-});
+}); -->
 
-import React, { useState } from 'react';
-import axios from 'axios';
 
-// Sample agent data (you would fetch this from your API)
+
+<!-- 
 const agentId = 1;
-
 const PropertyForm = () => {
   const [formData, setFormData] = useState({
     title: '',
@@ -226,4 +224,4 @@ const PropertyForm = () => {
   );
 };
 
-export default PropertyForm;
+export default PropertyForm; -->
