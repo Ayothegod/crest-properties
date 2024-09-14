@@ -6,58 +6,75 @@ import { Loader2, Lock } from "lucide-react";
 import { actions } from "astro:actions";
 import { useToast } from "@/hooks/use-toast";
 import { navigate } from "astro:transitions/client";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { resetPasswordSchema } from "@/lib/schema";
+
+type ResetPasswordSchemaType = z.infer<typeof resetPasswordSchema>;
 
 export default function ResetPasswordController({}) {
   const { toast } = useToast();
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ResetPasswordSchemaType>({
+    resolver: zodResolver(resetPasswordSchema),
+  });
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    // setIsLoading(true);
-    // const { data, error } = await actions.auth.requestOTP({
-    //   email,
-    // });
+  const onSubmit = async (input: ResetPasswordSchemaType) => {
+    setIsLoading(true);
+    const token = localStorage.getItem('token') as string 
+    const { data, error } = await actions.auth.updatePassword({
+     password: input.password,
+     confirmPassword: input.confirmPassword,
+     token
+    });
 
-    // if (error?.code === "FORBIDDEN") {
-    //   console.log(error?.message);
-    //   toast({
-    //     title: "⚠️ Login Failed.",
-    //     description: `${error?.message}`,
-    //   });
-    //   setIsLoading(false);
-    //   return;
-    // }
+    console.log(data, error);
 
-    // if (error) {
-    //   console.log(error);
-    //   toast({
-    //     title: "Uh oh! Something went wrong.",
-    //     description: `Try again later!`,
-    //   });
-    //   setIsLoading(false);
-    //   return;
-    // }
+    if (error?.code === "NOT_FOUND") {
+      console.log(error?.message);
+      toast({
+        title: "⚠️ Password Reset Failed.",
+        description: `${error?.message}`,
+      });
+      setIsLoading(false);
+      return;
+    }
 
-    // console.log(data);
-    // toast({
-    //   title: "✅ Login Successful",
-    //   description: `Welcome back! You have successfully logged in.`,
-    // });
+    if (error) {
+      console.log(error);
+      toast({
+        title: "Invalid or Expired Token",
+        description: `The reset token is invalid or has expired. Please request a new password reset.`,
+      });
+      setIsLoading(false);
+      return;
+    }
 
-    // setIsLoading(false);
+    localStorage.removeItem('token');
+    toast({
+      title: "✅ Password Reset Successfully",
+      description: `Your password has been successfully reset. You can now log in with your new credentials.`,
+    });
+
+    setIsLoading(false);
     navigate("/login");
   };
 
   return (
     <div className=" mt-20 p-4 w-full sm:w-96 sm:mx-auto  bg-listing-header-color shadow">
-      <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
-        <h2 className="text-xl font-bold text-center">Create a New Password
-        </h2>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-full flex flex-col gap-4"
+      >
+        <h2 className="text-xl font-bold text-center">Create a New Password</h2>
         <p className="font-medium text-xs text-center">
-        You’re almost done! Enter your new password below to complete the reset process.
+          You’re almost done! Enter your new password below to complete the
+          reset process.
         </p>
         <div className="space-y-2">
           <Label htmlFor="password">New Password</Label>
@@ -65,30 +82,42 @@ export default function ResetPasswordController({}) {
             id="new-password"
             type="password"
             placeholder="Enter your new password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
+            {...register("password")}
           />
+          {errors.password && (
+            <div className="text-xs text-red-500">
+              {errors.password?.message}
+            </div>
+          )}
         </div>
         <div className="space-y-2">
-          <Label htmlFor="email">Confirm New Password</Label>
+          <Label htmlFor="confirm-new-password">Confirm New Password</Label>
           <Input
             id="confirm-new-password"
             type="password"
             placeholder="Confirm your new password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
+            {...register("confirmPassword")}
           />
+          {errors.confirmPassword && (
+            <div className="text-xs text-red-500">
+              {errors.confirmPassword?.message}
+            </div>
+          )}
         </div>
 
         <Button type="submit" className="w-full">
-          {isLoading ? <Loader2 className="animate-spin" /> : "Set New Password"}
+          {isLoading ? (
+            <Loader2 className="animate-spin" />
+          ) : (
+            "Set New Password"
+          )}
         </Button>
 
         <div className="text-center mt-8">
           <h5 className="font-bold text-xs">Remembered your password?</h5>
-          <a href="/login" className="text-footer-bg text-xs">Log in here</a>
+          <a href="/login" className="text-footer-bg text-xs">
+            Log in here
+          </a>
         </div>
       </form>
     </div>

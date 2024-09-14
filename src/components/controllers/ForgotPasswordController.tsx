@@ -6,31 +6,42 @@ import { Loader2, Lock } from "lucide-react";
 import { actions } from "astro:actions";
 import { useToast } from "@/hooks/use-toast";
 import { navigate } from "astro:transitions/client";
+import { forgotPasswordSchema } from "@/lib/schema";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+type ForgotPasswordSchemaType = z.infer<typeof forgotPasswordSchema>;
 
 export default function ForgotPasswordController({}) {
   const { toast } = useToast();
-  const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ForgotPasswordSchemaType>({
+    resolver: zodResolver(forgotPasswordSchema),
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (input: ForgotPasswordSchemaType) => {
     setIsLoading(true);
     const { data, error } = await actions.auth.requestOTP({
-      email,
+      email: input.email,
     });
 
     toast({
-      description: `If an account with that email exists, you will receive an OTP shortly.`,
+      description: `If an account with this email exists, you will receive an OTP shortly.`,
     });
 
-    if (error?.code === 'TOO_MANY_REQUESTS') {
+    if (error?.code === "TOO_MANY_REQUESTS") {
       console.log(error?.message);
       toast({
         title: "OTP Request Cooldown",
         description: `It looks like you've recently requested an OTP. Please wait a few more minutes before requesting another one.`,
-      })
-      setIsLoading(false)
-      return
+      });
+      setIsLoading(false);
+      return;
     }
 
     if (error) {
@@ -54,7 +65,10 @@ export default function ForgotPasswordController({}) {
 
   return (
     <div className=" mt-20 p-4 w-full sm:w-96 sm:mx-auto  bg-listing-header-color shadow">
-      <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-full flex flex-col gap-4"
+      >
         <h2 className="text-xl font-bold text-center">Forgot Password</h2>
         <p className="font-medium text-xs text-center">
           Enter the email address associated with your account, and we’ll send
@@ -66,10 +80,13 @@ export default function ForgotPasswordController({}) {
             id="email"
             type="email"
             placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
+            {...register("email")}
           />
+          {errors.email && (
+            <Label className="text-xs text-red-500">
+              {errors.email?.message}
+            </Label>
+          )}
         </div>
         <Button type="submit" className="w-full">
           {isLoading ? <Loader2 className="animate-spin" /> : "Request OTP"}

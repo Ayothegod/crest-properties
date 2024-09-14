@@ -8,7 +8,7 @@ import Mailgun from "mailgun.js";
 import FormData from "form-data";
 import { generateOTP } from "@/lib/services";
 import Queue from "bull";
-
+import jwt from "jsonwebtoken";
 export const auth = {
   createUser: defineAction({
     input: z.object({
@@ -202,7 +202,7 @@ export const auth = {
         to: [`${input.email}`],
         subject: "Action Required: Your Request Will Expire in 5 Minutes",
         html: `
-          <div>
+        <div>
         <h2>Hi ${existingUser.fullname},</h2>
         <br/>
         <p>We received a request related to your account. Please note that this request will expire in 5 minutes. If you do not complete the required
@@ -243,6 +243,8 @@ export const auth = {
           otp: input.otp,
         },
       });
+      console.log(existingOtp);
+
       if (!existingOtp) {
         throw new ActionError({
           code: "FORBIDDEN",
@@ -250,15 +252,47 @@ export const auth = {
             "OTP is either incorrect or expired. Please request a new one and try again.",
         });
       }
-      // async function deleteScheduledItems() {
-      //   if (existingOtp) {
-      //     await prisma.otp.delete({
-      //       where: { id: existingOtp.id },
-      //     });
-      //     console.log(`Used Otp deleted successfully.`);
-      //   }
-      // }
-      // setInterval(deleteScheduledItems, 1 * 60 * 1000);
+
+      const secretKey = import.meta.env.JWT_SECRET_KEY;
+      const generateToken = (userId: string) => {
+        return jwt.sign({ userId }, secretKey, { expiresIn: "5m" });
+      };
+      const token = generateToken(existingOtp.userId);
+
+      return token;
+    },
+  }),
+  updatePassword: defineAction({
+    input: z.object({
+      password: z.string(),
+      confirmPassword: z.string(),
+      token: z.string(),
+    }),
+    async handler(input, context) {
+      const secretKey = import.meta.env.JWT_SECRET_KEY;
+      const decoded = jwt.verify(input.token, secretKey);
+
+      const passwordHash = await hash(input.password, {
+        memoryCost: 19456,
+        timeCost: 2,
+        outputLen: 32,
+        parallelism: 1,
+      });
+
+      const userWithNewPassword = await prisma.user.update({
+        where: {
+          id: decoded.userId,
+        },
+        data: {
+          password: passwordHash,
+        },
+      });
+      if (!userWithNewPassword) {
+        throw new ActionError({
+          code: "NOT_FOUND",
+          message: "There was an error while trying to reset password!",
+        });
+      }
 
       return "Success";
     },

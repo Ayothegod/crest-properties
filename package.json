@@ -33,6 +33,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "form-data": "^4.0.0",
+    "jsonwebtoken": "^9.0.2",
     "lucia": "^3.2.0",
     "lucide-astro": "^0.439.0",
     "lucide-react": "^0.439.0",

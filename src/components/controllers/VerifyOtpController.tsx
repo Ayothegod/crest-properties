@@ -6,17 +6,26 @@ import { Loader2, Lock } from "lucide-react";
 import { actions } from "astro:actions";
 import { useToast } from "@/hooks/use-toast";
 import { navigate } from "astro:transitions/client";
+import { verifyOtpSchema } from "@/lib/schema";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+type VerifyOtpSchemaType = z.infer<typeof verifyOtpSchema>;
 
 export default function VerifyOtpController({}) {
   const { toast } = useToast();
-  const [otp, setOtp] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<VerifyOtpSchemaType>({ resolver: zodResolver(verifyOtpSchema) });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (input: VerifyOtpSchemaType) => {
     setIsLoading(true);
     const { data, error } = await actions.auth.verifyOtp({
-      otp,
+      otp: input.otp,
     });
 
     if (error?.code === "FORBIDDEN") {
@@ -46,12 +55,16 @@ export default function VerifyOtpController({}) {
     });
 
     setIsLoading(false);
-    navigate("/auth/reset-password");
+    localStorage.setItem("token", data)
+    navigate(`/auth/reset-password?token=${data}`);
   };
 
   return (
     <div className=" mt-20 p-4 w-full sm:w-96 sm:mx-auto  bg-listing-header-color shadow">
-      <form onSubmit={handleSubmit} className="w-full flex flex-col gap-4">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="w-full flex flex-col gap-4"
+      >
         <h2 className="text-xl font-bold text-center">Verify Your Account</h2>
         <p className="font-medium text-xs text-center">
           We’ve sent a One-Time Password (OTP) to your email. Enter the code
@@ -63,10 +76,13 @@ export default function VerifyOtpController({}) {
             id="text"
             type="text"
             placeholder="Enter the 6 digits OTP"
-            value={otp}
-            onChange={(e) => setOtp(e.target.value)}
-            required
+            {...register("otp")}
           />
+          {errors.otp && (
+            <Label className="text-xs text-red-500">
+              {errors.otp?.message}
+            </Label>
+          )}
         </div>
         <Button type="submit" className="w-full">
           {isLoading ? <Loader2 className="animate-spin" /> : "Verify"}
