@@ -58,6 +58,9 @@ export default {
           5: "hsl(var(--chart-5))",
         },
       },
+      fontFamily: {
+        inter: ["Inter", "sans-serif"],
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

@@ -1,14 +1,14 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2, Lock } from "lucide-react";
-import { actions } from "astro:actions";
 import { useToast } from "@/hooks/use-toast";
-import { navigate } from "astro:transitions/client";
 import { verifyOtpSchema } from "@/lib/schema";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { actions } from "astro:actions";
+import { navigate } from "astro:transitions/client";
+import { Loader2 } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 type VerifyOtpSchemaType = z.infer<typeof verifyOtpSchema>;

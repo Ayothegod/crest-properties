@@ -9,6 +9,14 @@ import FormData from "form-data";
 import { generateOTP } from "@/lib/services";
 import Queue from "bull";
 import jwt from "jsonwebtoken";
+
+// const user = context.locals.user;
+// if (!user) {
+// 	return context.redirect("/login");
+// }
+
+// const username = user.username;
+
 export const auth = {
   createUser: defineAction({
     input: z.object({
@@ -270,7 +278,7 @@ export const auth = {
     }),
     async handler(input, context) {
       const secretKey = import.meta.env.JWT_SECRET_KEY;
-      const decoded = jwt.verify(input.token, secretKey);
+      const decoded: any = jwt.verify(input.token, secretKey);
 
       const passwordHash = await hash(input.password, {
         memoryCost: 19456,
@@ -295,6 +303,24 @@ export const auth = {
       }
 
       return "Success";
+    },
+  }),
+  signOut: defineAction({
+    async handler(input, context) {
+      if (!context.locals.session) {
+        throw new ActionError({
+          code: "BAD_REQUEST",
+          message:
+            "User is already logged out.",
+        });
+      }
+    
+      await lucia.invalidateSession(context.locals.session.id);
+    
+      const sessionCookie = lucia.createBlankSessionCookie();
+      context.cookies.set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
+    
+      return
     },
   }),
 };

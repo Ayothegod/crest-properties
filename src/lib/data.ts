@@ -6,6 +6,12 @@ export const footerDataColOne = [
   { id: 5, title: "All listings", url: "/all" },
 ];
 
+export const sidebarData = [
+  { id: 1, title: "Dashboard", url: "/dashboard", iconType: "LayoutDashboard" },
+  { id: 4, title: "Analytics", url: "/Analytics", iconType: "BarChartBig" },
+  { id: 6, title: "Accounts", url: "/Accounts", iconType: "Users" },
+];
+
 export const footerDataColTwo = [
   { id: 1, title: "About", url: "/about" },
   { id: 2, title: "Become an agent", url: "/agent" },
@@ -42,14 +48,6 @@ export const navLists: NavList[] = [
     iconName: "ChevronDown",
     isButton: false,
     children: true,
-  },
-  {
-    id: 3,
-    title: "Lands",
-    url: "/lands",
-    withIcon: false,
-    isButton: false,
-    children: false,
   },
   {
     id: 4,

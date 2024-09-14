@@ -1,0 +1,52 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { sidebarData } from "@/lib/data";
+import "@/styles/globals.css";
+import { BarChartBig, LayoutDashboard, Users } from "lucide-astro";
+// import { Icon } from "lucide-astro";
+const { pathname } = Astro.url;
+---
+
+<Layout title="Crest properties - Home">
+  <div class="">
+    <section class="flex">
+      {/* DESKTOP-SIDEBAR */}
+      <div class="hidden md:flex md:w-[260px] flex-shrink-0 debug-p">
+        <div class="w-full h-screen divide-y-2">
+          <div class="text-xl font-bold py-2 px-2">
+            <span>Project Name + Logo</span>
+          </div>
+
+          <ul class="flex flex-col gap-1">
+            {
+              sidebarData.map((data) => (
+                <a
+                  href={data.url}
+                  class={`flex items-center gap-4 p-2 rounded-md text-neutral-500 hover:bg-neutral-100 ${data.url === pathname && "bg-neutral-100 text-black"}`}
+                >
+                  {data.iconType == "LayoutDashboard" && (
+                    <LayoutDashboard class="h-5 w-5" />
+                  )}
+                  {data.iconType == "BarChartBig" && (
+                    <BarChartBig class="h-5 w-5" />
+                  )}
+                  {data.iconType == "Users" && <Users class="h-5 w-5" />}
+                  {data.title}
+                </a>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+
+      <div class="w-full flex-grow">
+        {/* <TopBar/> */}
+        Hello
+        <slot />
+      </div>
+
+      {/* MOBILE-MENU  */}
+      <div class="md:hidden">Sidebar</div>
+    </section>
+  </div>
+</Layout>
