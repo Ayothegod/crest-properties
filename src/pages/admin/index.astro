@@ -3,9 +3,9 @@ import AgentLayout from "@/layouts/AgentLayout.astro";
 import { Button } from "@/components/ui/button";
 
 const user = Astro.locals.user;
-console.log(user);
+// console.log(user);
 if (!user) {
-  return Astro.rewrite("/login");
+  return Astro.rewrite(`/login?redirect=${Astro.url.pathname}`);
 }
 ---
 
@@ -21,7 +21,9 @@ if (!user) {
         </p>
       </div>
 
-      <Button>New Listing </Button>
+      <a href="/admin/create-new">
+        <Button>New Listing </Button>
+      </a>
     </div>
   </div>
 </AgentLayout>
