@@ -3,7 +3,6 @@ import Layout from "@/layouts/Layout.astro";
 import { sidebarData } from "@/lib/data";
 import "@/styles/globals.css";
 import { BarChartBig, LayoutDashboard, Users } from "lucide-astro";
-// import { Icon } from "lucide-astro";
 const { pathname } = Astro.url;
 import AgentHeader from "@/components/utils/AgentHeader";
 import Logo from "@/components/utils/Logo"
@@ -48,7 +47,7 @@ import Logo from "@/components/utils/Logo"
       </div>
 
       {/* MOBILE-MENU  */}
-      <div class="md:hidden">Sidebar</div>
+      <div class="">Sidebar</div>
     </section>
   </div>
 </Layout>

@@ -67,13 +67,12 @@
   }
 }
 
-.mask1 {
+/* .mask1 {
   -webkit-mask-image: url(./assets/masking.png);
   mask-image: url(./assets/masking.png);
-  /* height: 300px; */
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
-}
+} */
 
 .bodySize {
   max-width: 1240px;
